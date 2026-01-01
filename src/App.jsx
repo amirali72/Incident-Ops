@@ -1,10 +1,11 @@
 import { useState } from 'react'
+import Login from './pages/Login'
 
 function App() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-amber-800">Incident Dashboard</h1>
+      <Login/>
     </>
   )
 }
