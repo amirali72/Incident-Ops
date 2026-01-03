@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { validUsers } from "../data/userFile";
-// import validUsers from "../data/userFile";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
+  
+  const { isAuthenticated, user, login, logout } = useAuth();
 
   const handleLogin = () => {
     if (email === "" || password === "") {
@@ -17,10 +21,11 @@ const Login = () => {
         email === validUsers[i].email &&
         password === validUsers[i].password
       ) {
-        console.log("Login Successful");
         setError("");
+        login({ email: validUsers[i].email, name: validUsers[i].name });
+        navigate("/dashboard");
         return;
-      } 
+      }
     }
     if (email !== "" && password !== "") {
       setError("Wrong Credentials");
