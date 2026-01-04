@@ -1,0 +1,265 @@
+export const mockIncidents = [
+  {
+    id: "INC001",
+    createdBy: "admin@company.com",
+    severity: "P1",
+    status: "In Progress",
+    openedAt: Date.now() - 2 * 60 * 60 * 1000, // 2 hours ago
+    slaHours: 4,
+    assignedTo: "John Doe",
+    assignedGroup: "Network Team",
+    title: "Network outage in Mumbai Data Center",
+    description:
+      "Complete network outage reported in Mumbai DC affecting 500+ servers",
+  },
+
+  {
+    id: "INC002",
+    createdBy: "monitor@company.com",
+    severity: "P1",
+    status: "New",
+    openedAt: Date.now() - 6 * 60 * 60 * 1000, // breached
+    slaHours: 4,
+    assignedTo: "Amit Sharma",
+    assignedGroup: "Network Team",
+    title: "Core router failure",
+    description: "Primary core router stopped responding causing site outage",
+  },
+
+  {
+    id: "INC003",
+    createdBy: "soc@company.com",
+    severity: "P1",
+    status: "Resolved",
+    openedAt: Date.now() - 3 * 60 * 60 * 1000,
+    slaHours: 4,
+    assignedTo: "Rohit Verma",
+    assignedGroup: "Security Team",
+    title: "DDoS attack detected",
+    description: "High traffic spike identified as DDoS attack",
+  },
+
+  {
+    id: "INC004",
+    createdBy: "alerts@company.com",
+    severity: "P1",
+    status: "Closed",
+    openedAt: Date.now() - 1 * 24 * 60 * 60 * 1000,
+    slaHours: 4,
+    assignedTo: "Neha Singh",
+    assignedGroup: "Server Team",
+    title: "Critical server crash",
+    description: "Production database server crashed unexpectedly",
+  },
+
+  {
+    id: "INC005",
+    createdBy: "admin@company.com",
+    severity: "P1",
+    status: "In Progress",
+    openedAt: Date.now() - 5 * 60 * 60 * 1000, // breached
+    slaHours: 4,
+    assignedTo: "Suresh Kumar",
+    assignedGroup: "Application Team",
+    title: "Payment API down",
+    description: "Payment gateway API not responding for live users",
+  },
+
+  // ---------- P2 (High) ----------
+  {
+    id: "INC006",
+    createdBy: "alerts@company.com",
+    severity: "P2",
+    status: "In Progress",
+    openedAt: Date.now() - 10 * 60 * 60 * 1000,
+    slaHours: 8,
+    assignedTo: "Rahul Jain",
+    assignedGroup: "Server Team",
+    title: "High CPU usage on app server",
+    description: "CPU usage above 90% for last 2 hours",
+  },
+
+  {
+    id: "INC007",
+    createdBy: "monitor@company.com",
+    severity: "P2",
+    status: "New",
+    openedAt: Date.now() - 12 * 60 * 60 * 1000, // breached
+    slaHours: 8,
+    assignedTo: "Ankit Mishra",
+    assignedGroup: "Application Team",
+    title: "API response delay",
+    description: "Application APIs responding slowly",
+  },
+
+  {
+    id: "INC008",
+    createdBy: "soc@company.com",
+    severity: "P2",
+    status: "Resolved",
+    openedAt: Date.now() - 1 * 24 * 60 * 60 * 1000,
+    slaHours: 8,
+    assignedTo: "Pooja Mehta",
+    assignedGroup: "Security Team",
+    title: "Suspicious login attempts",
+    description: "Multiple failed login attempts detected",
+  },
+
+  {
+    id: "INC009",
+    createdBy: "alerts@company.com",
+    severity: "P2",
+    status: "Closed",
+    openedAt: Date.now() - 3 * 24 * 60 * 60 * 1000,
+    slaHours: 8,
+    assignedTo: "Kunal Shah",
+    assignedGroup: "Network Team",
+    title: "Intermittent network latency",
+    description: "Users reported intermittent network slowness",
+  },
+
+  {
+    id: "INC010",
+    createdBy: "admin@company.com",
+    severity: "P2",
+    status: "In Progress",
+    openedAt: Date.now() - 9 * 60 * 60 * 1000, // breached
+    slaHours: 8,
+    assignedTo: "Manish Gupta",
+    assignedGroup: "Server Team",
+    title: "Disk IO bottleneck",
+    description: "High disk IO observed on reporting server",
+  },
+
+  // ---------- P3 (Medium) ----------
+  {
+    id: "INC011",
+    createdBy: "alerts@company.com",
+    severity: "P3",
+    status: "New",
+    openedAt: Date.now() - 2 * 24 * 60 * 60 * 1000,
+    slaHours: 24,
+    assignedTo: "Ravi Patel",
+    assignedGroup: "Application Team",
+    title: "Minor UI bug reported",
+    description: "Alignment issue on dashboard charts",
+  },
+
+  {
+    id: "INC012",
+    createdBy: "monitor@company.com",
+    severity: "P3",
+    status: "In Progress",
+    openedAt: Date.now() - 30 * 60 * 60 * 1000, // breached
+    slaHours: 24,
+    assignedTo: "Simran Kaur",
+    assignedGroup: "Server Team",
+    title: "Log rotation failure",
+    description: "Old logs not getting rotated automatically",
+  },
+
+  {
+    id: "INC013",
+    createdBy: "admin@company.com",
+    severity: "P3",
+    status: "Resolved",
+    openedAt: Date.now() - 4 * 24 * 60 * 60 * 1000,
+    slaHours: 24,
+    assignedTo: "Vikas Malhotra",
+    assignedGroup: "Network Team",
+    title: "Bandwidth usage spike",
+    description: "Unexpected bandwidth spike during night hours",
+  },
+
+  {
+    id: "INC014",
+    createdBy: "alerts@company.com",
+    severity: "P3",
+    status: "Closed",
+    openedAt: Date.now() - 5 * 24 * 60 * 60 * 1000,
+    slaHours: 24,
+    assignedTo: "Ayesha Khan",
+    assignedGroup: "Security Team",
+    title: "Outdated firewall rules",
+    description: "Firewall rules require cleanup",
+  },
+
+  {
+    id: "INC015",
+    createdBy: "monitor@company.com",
+    severity: "P3",
+    status: "In Progress",
+    openedAt: Date.now() - 26 * 60 * 60 * 1000, // breached
+    slaHours: 24,
+    assignedTo: "Nitin Arora",
+    assignedGroup: "Application Team",
+    title: "Email notifications delayed",
+    description: "System emails are delayed by several minutes",
+  },
+
+  // ---------- P4 (Low) ----------
+  {
+    id: "INC016",
+    createdBy: "admin@company.com",
+    severity: "P4",
+    status: "New",
+    openedAt: Date.now() - 6 * 24 * 60 * 60 * 1000,
+    slaHours: 48,
+    assignedTo: "Harsh Vardhan",
+    assignedGroup: "Server Team",
+    title: "Disk space warning",
+    description: "Disk usage crossed 75% threshold",
+  },
+
+  {
+    id: "INC017",
+    createdBy: "alerts@company.com",
+    severity: "P4",
+    status: "In Progress",
+    openedAt: Date.now() - 3 * 24 * 60 * 60 * 1000,
+    slaHours: 48,
+    assignedTo: "Mehul Joshi",
+    assignedGroup: "Network Team",
+    title: "Secondary link flapping",
+    description: "Backup network link flapping intermittently",
+  },
+
+  {
+    id: "INC018",
+    createdBy: "monitor@company.com",
+    severity: "P4",
+    status: "Closed",
+    openedAt: Date.now() - 9 * 24 * 60 * 60 * 1000,
+    slaHours: 48,
+    assignedTo: "Sneha Iyer",
+    assignedGroup: "Application Team",
+    title: "Typo in help documentation",
+    description: "Minor typo found in user help section",
+  },
+
+  {
+    id: "INC019",
+    createdBy: "admin@company.com",
+    severity: "P4",
+    status: "Resolved",
+    openedAt: Date.now() - 8 * 24 * 60 * 60 * 1000,
+    slaHours: 48,
+    assignedTo: "Karthik Rao",
+    assignedGroup: "Security Team",
+    title: "Password policy clarification",
+    description: "User requested clarification on password policy",
+  },
+
+  {
+    id: "INC020",
+    createdBy: "alerts@company.com",
+    severity: "P4",
+    status: "In Progress",
+    openedAt: Date.now() - 60 * 60 * 1000,
+    slaHours: 48,
+    assignedTo: "Divya Nair",
+    assignedGroup: "Server Team",
+    title: "Test environment cleanup",
+    description: "Old test VMs need cleanup",
+  },
+];
