@@ -14,7 +14,7 @@ const Navbar = () => {
   };
   return (
     <>
-      <nav className="w-full shadow-lg transition duration-300 flex">
+      <nav className="w-full shadow-lg transition duration-300 flex h-12">
         <div className="m-2 flex justify-between w-full">
           <div className="flex">
             <PiFediverseLogoBold className="self-center text-blue-800 text-xl" />
