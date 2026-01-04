@@ -4,7 +4,10 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import { useAuth } from "./context/AuthContext";
 import ProtectedRoute from "./utils/ProtectedRoute";
-
+import DashboardLayout from "./components/DashboardLayout";
+import Incidents from "./pages/Incidents";
+import Analytics from "./pages/Analytics";
+import Reports from "./pages/Reports";
 
 function App() {
   return (
@@ -13,7 +16,12 @@ function App() {
         <Route path="/" element={<Navigate to="/login" replace />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/incidents" element={<Incidents />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/reports" element={<Reports />} />
+          </Route>
         </Route>
       </Routes>
     </>
