@@ -23,11 +23,13 @@ export const AuthProvider = ({ children }) => {
 
   // Logout function
   const logout = () => {
-    setIsAuthenticated(false);
-    setUser(null);
+    if (confirm("Do you want to logout?")) {
+      setIsAuthenticated(false);
+      setUser(null);
 
-    localStorage.removeItem("isAuthenticated");
-    localStorage.removeItem("user");
+      localStorage.removeItem("isAuthenticated");
+      localStorage.removeItem("user");
+    }
   };
 
   return (
