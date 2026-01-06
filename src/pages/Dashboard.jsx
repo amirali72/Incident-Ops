@@ -1,8 +1,39 @@
 import React from "react";
 import { mockIncidents } from "../data/mockIncidents";
+import {
+  Cell,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+} from "recharts";
 
 const Dashboard = () => {
   const totalIncidents = mockIncidents.length;
+
+  const chartData = [
+    {
+      name: "P1",
+      value: mockIncidents.filter((item) => item.severity === "P1").length,
+      color: "#ef4444",
+    },
+    {
+      name: "P2",
+      value: mockIncidents.filter((item) => item.severity === "P2").length,
+      color: "#f97316",
+    },
+    {
+      name: "P3",
+      value: mockIncidents.filter((item) => item.severity === "P3").length,
+      color: "#eab308",
+    },
+    {
+      name: "P4",
+      value: mockIncidents.filter((item) => item.severity === "P4").length,
+      color: "#22c55e",
+    },
+  ];
 
   const openIncidents = mockIncidents.filter(
     (item) => item.status !== "Closed" && item.status !== "Resolved"
@@ -21,50 +52,68 @@ const Dashboard = () => {
   }).length;
 
   return (
-    <div className="p-6">
-      {/* Page Title */}
-      <h1 className="font-semibold text-xl mb-6">Dashboard</h1>
+    <div>
+      <div className="p-6">
+        {/* Page Title */}
+        {/* <h1 className="font-semibold text-xl mb-6">Dashboard</h1> */}
 
-      {/* Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {/* Total Incidents */}
-        <div className="bg-white shadow-md rounded-xl p-5">
-          <h2 className="text-sm text-gray-500 font-semibold text-center">
-            TOTAL INCIDENTS
-          </h2>
-          <p className="text-5xl font-bold text-center mt-3">
-            {totalIncidents}
-          </p>
+        {/* Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Total Incidents */}
+          <div className="bg-white shadow-md rounded-xl p-5">
+            <h2 className="text-sm text-gray-500 font-semibold text-center">
+              TOTAL INCIDENTS
+            </h2>
+            <p className="text-5xl font-bold text-center mt-3">
+              {totalIncidents}
+            </p>
+          </div>
+
+          {/* Open Incidents */}
+          <div className="bg-white shadow-md rounded-xl p-5">
+            <h2 className="text-sm text-gray-500 font-semibold text-center">
+              OPEN INCIDENTS
+            </h2>
+            <p className="text-5xl font-bold text-blue-600 text-center mt-3">
+              {openIncidents}
+            </p>
+          </div>
+
+          {/* Critical P1 */}
+          <div className="bg-white shadow-md rounded-xl p-5">
+            <h2 className="text-sm text-red-500 font-semibold text-center">
+              CRITICAL (P1)
+            </h2>
+            <p className="text-5xl font-bold text-red-600 text-center mt-3">
+              {criticalIncidents}
+            </p>
+          </div>
+
+          {/* SLA Breached */}
+          <div className="bg-white shadow-md rounded-xl p-5">
+            <h2 className="text-sm text-red-500 font-semibold text-center">
+              SLA Breached
+            </h2>
+            <p className="text-5xl font-bold text-red-600 text-center mt-3">
+              {slaBreached}
+            </p>
+          </div>
         </div>
-
-        {/* Open Incidents */}
-        <div className="bg-white shadow-md rounded-xl p-5">
-          <h2 className="text-sm text-gray-500 font-semibold text-center">
-            OPEN INCIDENTS
-          </h2>
-          <p className="text-5xl font-bold text-blue-600 text-center mt-3">
-            {openIncidents}
-          </p>
-        </div>
-
-        {/* Critical P1 */}
-        <div className="bg-white shadow-md rounded-xl p-5">
-          <h2 className="text-sm text-red-500 font-semibold text-center">
-            CRITICAL (P1)
-          </h2>
-          <p className="text-5xl font-bold text-red-600 text-center mt-3">
-            {criticalIncidents}
-          </p>
-        </div>
-
-        {/* SLA Breached */}
-        <div className="bg-white shadow-md rounded-xl p-5">
-          <h2 className="text-sm text-red-500 font-semibold text-center">
-            SLA Breached
-          </h2>
-          <p className="text-5xl font-bold text-red-600 text-center mt-3">
-            {slaBreached}
-          </p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-6">
+        <div className=" bg-white p-6 rounded-xl shadow-md">
+          <h2 className="text-lg font-semibold mb-4">Incidents by Severity</h2>
+          <ResponsiveContainer width="100%" height={200}>
+            <BarChart data={chartData}>
+              <XAxis dataKey="name" />
+              <Tooltip />
+              <Bar dataKey="value">
+                {chartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>
