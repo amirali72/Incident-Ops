@@ -35,6 +35,30 @@ const Dashboard = () => {
     },
   ];
 
+  const statusChartData = [
+    {
+      name: "New",
+      value: mockIncidents.filter((item) => item.status === "New").length,
+      color: "#3b82f6",
+    },
+    {
+      name: "In Progress",
+      value: mockIncidents.filter((item) => item.status === "In Progress")
+        .length,
+      color: "#f59e0b",
+    },
+    {
+      name: "Resolved",
+      value: mockIncidents.filter((item) => item.status === "Resolved").length,
+      color: "#10b981",
+    },
+    {
+      name: "Closed",
+      value: mockIncidents.filter((item) => item.status === "Closed").length,
+      color: "#6b7280",
+    },
+  ];
+
   const openIncidents = mockIncidents.filter(
     (item) => item.status !== "Closed" && item.status !== "Resolved"
   ).length;
@@ -109,6 +133,20 @@ const Dashboard = () => {
               <Tooltip />
               <Bar dataKey="value">
                 {chartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <div className=" bg-white p-6 rounded-xl shadow-md">
+          <h2 className="text-lg font-semibold mb-4">Incidents by Status</h2>
+          <ResponsiveContainer width="100%" height={200}>
+            <BarChart data={statusChartData}>
+              <XAxis dataKey="name" />
+              <Tooltip />
+              <Bar dataKey="value">
+                {statusChartData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Bar>
