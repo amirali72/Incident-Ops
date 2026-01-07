@@ -7,6 +7,11 @@ import {
   BarChart,
   Bar,
   XAxis,
+  LineChart,
+  Line,
+  YAxis,
+  CartesianGrid,
+  Legend,
 } from "recharts";
 
 const Dashboard = () => {
@@ -75,7 +80,7 @@ const Dashboard = () => {
     return Date.now() > item.openedAt + item.slaHours * 60 * 60 * 1000;
   }).length;
 
-  //Data for Line Chart 
+  //Data for Line Chart
   const dateCounts = {};
 
   mockIncidents.forEach((incident) => {
@@ -98,8 +103,9 @@ const Dashboard = () => {
       count: dateCounts[date],
     };
   });
-
+  trendData.sort((a, b) => (a.date < b.date ? 1 : -1));
   console.log(trendData);
+  
 
   return (
     <div>
@@ -177,6 +183,28 @@ const Dashboard = () => {
                 ))}
               </Bar>
             </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+      {/* Trend Chart - Full Width */}
+      <div className="p-6">
+        <div className="bg-white p-6 rounded-xl shadow-md">
+          <h2 className="text-lg font-semibold mb-4">
+            Incident Trend (Last 7 Days)
+          </h2>
+          <ResponsiveContainer width="100%" height={250}>
+            <LineChart data={trendData.slice(0,7)}>
+              {/* <CartesianGrid strokeDasharray="3 3" /> */}
+              <XAxis dataKey="date" />
+              {/* <YAxis /> */}
+              <Tooltip />
+              <Line
+                type="monotone"
+                dataKey="count"
+                stroke="#3b82f6"
+                strokeWidth={2}
+              />
+            </LineChart>
           </ResponsiveContainer>
         </div>
       </div>
