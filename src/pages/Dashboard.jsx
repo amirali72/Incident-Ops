@@ -1,6 +1,12 @@
 import React from "react";
 import { mockIncidents } from "../data/mockIncidents";
 import {
+  calculateDashboardStats,
+  getSeverityChartData,
+  getStatusChartData,
+  getTrendData,
+} from "../utils/dashboardHelpers";
+import {
   Cell,
   Tooltip,
   ResponsiveContainer,
@@ -15,97 +21,16 @@ import {
 } from "recharts";
 
 const Dashboard = () => {
-  const totalIncidents = mockIncidents.length;
+  const {
+    totalIncidents,
+    openIncidents,
+    criticalIncidents,
+    slaBreached,
+  } = calculateDashboardStats(mockIncidents);
 
-  const chartData = [
-    {
-      name: "P1",
-      value: mockIncidents.filter((item) => item.severity === "P1").length,
-      color: "#ef4444",
-    },
-    {
-      name: "P2",
-      value: mockIncidents.filter((item) => item.severity === "P2").length,
-      color: "#f97316",
-    },
-    {
-      name: "P3",
-      value: mockIncidents.filter((item) => item.severity === "P3").length,
-      color: "#eab308",
-    },
-    {
-      name: "P4",
-      value: mockIncidents.filter((item) => item.severity === "P4").length,
-      color: "#22c55e",
-    },
-  ];
-
-  const statusChartData = [
-    {
-      name: "New",
-      value: mockIncidents.filter((item) => item.status === "New").length,
-      color: "#3b82f6",
-    },
-    {
-      name: "In Progress",
-      value: mockIncidents.filter((item) => item.status === "In Progress")
-        .length,
-      color: "#f59e0b",
-    },
-    {
-      name: "Resolved",
-      value: mockIncidents.filter((item) => item.status === "Resolved").length,
-      color: "#10b981",
-    },
-    {
-      name: "Closed",
-      value: mockIncidents.filter((item) => item.status === "Closed").length,
-      color: "#6b7280",
-    },
-  ];
-
-  const openIncidents = mockIncidents.filter(
-    (item) => item.status !== "Closed" && item.status !== "Resolved"
-  ).length;
-
-  const criticalIncidents = mockIncidents.filter(
-    (item) => item.severity === "P1"
-  ).length;
-
-  const slaBreached = mockIncidents.filter((item) => {
-    if (item.status === "Closed" || item.status === "Resolved") {
-      return false;
-    }
-
-    return Date.now() > item.openedAt + item.slaHours * 60 * 60 * 1000;
-  }).length;
-
-  //Data for Line Chart
-  const dateCounts = {};
-
-  mockIncidents.forEach((incident) => {
-    const date = new Date(incident.openedAt);
-    const formatted = date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-    });
-
-    if (dateCounts[formatted]) {
-      dateCounts[formatted] = dateCounts[formatted] + 1;
-    } else {
-      dateCounts[formatted] = 1;
-    }
-  });
-
-  const trendData = Object.keys(dateCounts).map((date) => {
-    return {
-      date: date,
-      count: dateCounts[date],
-    };
-  });
-  trendData.sort((a, b) => (a.date < b.date ? 1 : -1));
-  console.log(trendData);
-  
+  const chartData = getSeverityChartData(mockIncidents);
+  const statusChartData = getStatusChartData(mockIncidents);
+  const trendData = getTrendData(mockIncidents);
 
   return (
     <div>
@@ -193,7 +118,7 @@ const Dashboard = () => {
             Incident Trend (Last 7 Days)
           </h2>
           <ResponsiveContainer width="100%" height={250}>
-            <LineChart data={trendData.slice(0,7)}>
+            <LineChart data={trendData.slice(0, 7)}>
               {/* <CartesianGrid strokeDasharray="3 3" /> */}
               <XAxis dataKey="date" />
               {/* <YAxis /> */}
