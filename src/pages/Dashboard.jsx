@@ -75,6 +75,32 @@ const Dashboard = () => {
     return Date.now() > item.openedAt + item.slaHours * 60 * 60 * 1000;
   }).length;
 
+  //Data for Line Chart 
+  const dateCounts = {};
+
+  mockIncidents.forEach((incident) => {
+    const date = new Date(incident.openedAt);
+    const formatted = date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
+
+    if (dateCounts[formatted]) {
+      dateCounts[formatted] = dateCounts[formatted] + 1;
+    } else {
+      dateCounts[formatted] = 1;
+    }
+  });
+
+  const trendData = Object.keys(dateCounts).map((date) => {
+    return {
+      date: date,
+      count: dateCounts[date],
+    };
+  });
+
+  console.log(trendData);
+
   return (
     <div>
       <div className="p-6">
