@@ -8,7 +8,7 @@ import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
   return (
-    <div className="h-[calc(100vh-3rem)] bg-gray-50 w-64">
+    <div className="bg-gray-50 w-64">
       <div className="py-8 px-4 space-y-2">
         
         <NavLink
