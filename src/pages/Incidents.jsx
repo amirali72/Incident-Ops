@@ -1,14 +1,70 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaCircle } from "react-icons/fa";
 import { mockIncidents } from "../data/mockIncidents";
 
 const Incidents = () => {
+  const [searchVal, setSearchVal] = useState("");
+  const [filteredINC, setFilteredINC] = useState(mockIncidents);
+  const [sevFilter, setSevFilter] = useState("all");
+
+  const searchIncidents = () => {
+    const filteredData = mockIncidents.filter(
+      (item) =>
+        item.id.toLowerCase().includes(searchVal.toLowerCase()) ||
+        item.title.toLowerCase().includes(searchVal.toLowerCase())
+    );
+    setFilteredINC(filteredData);
+  };
+
+  const filterSeverity = (e) => {
+    const newSevFilter = e.target.value;
+    setSevFilter(newSevFilter);
+
+    // Filter from ORIGINAL data every time
+    const filteredData = filteredINC.filter(
+      (item) => newSevFilter === "all" || item.severity === newSevFilter
+    );
+    setFilteredINC(filteredData);
+  };
+
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Incidents</h1>
 
       <div className="bg-white rounded-xl shadow-md overflow-hidden ">
         <div className="overflow-x-auto ">
+          <div className="flex items-center gap-3 p-3">
+            <input
+              type="text"
+              value={searchVal}
+              onChange={(e) => setSearchVal(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && searchIncidents()}
+              className="border-2 border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+            <button
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200 shadow-sm"
+              onClick={searchIncidents}
+            >
+              Search
+            </button>
+
+            <label>
+              Severity :
+              <select
+                name="Severity"
+                value={sevFilter}
+                onChange={(e) => filterSeverity(e)}
+              >
+                <option value="all">All</option>
+                <option value="P1">P1</option>
+                <option value="P2">P2</option>
+                <option value="P3">P3</option>
+                <option value="P4">P4</option>
+              </select>
+            </label>
+            <p>{sevFilter}</p>
+          </div>
+
           <table className="w-full">
             <thead className="bg-gray-100 border-b border-gray-200">
               <tr>
@@ -37,7 +93,7 @@ const Incidents = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {mockIncidents.map((item) => {
+              {filteredINC.map((item) => {
                 const sev =
                   item.severity === "P1"
                     ? "Critical"
@@ -70,13 +126,13 @@ const Incidents = () => {
 
                 const hours = Math.floor(
                   Math.abs(remaining) / (1000 * 60 * 60)
-                ); 
+                );
                 const minutes = Math.floor(
                   (Math.abs(remaining) % (1000 * 60 * 60)) / (1000 * 60)
                 );
 
                 const slaStatus =
-                  item.status === "Closed" ? (
+                  item.status === "Closed" || item.status === "Resolved" ? (
                     <span className="text-green-600 flex space-x-1.5">
                       <FaCircle className="self-center" />
                       <h1>Completed</h1>
