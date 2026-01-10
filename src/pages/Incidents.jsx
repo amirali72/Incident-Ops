@@ -48,65 +48,69 @@ const Incidents = () => {
               Search
             </button>
 
-            <label>
-              Severity :
-              <select
-                name="Severity"
-                value={sevFilter}
-                onChange={(e) => {
-                  const newSev = e.target.value;
-                  setSevFilter(newSev);
-                  const filteredData = mockIncidents.filter(
-                    (item) =>
-                      (item.id
-                        .toLowerCase()
-                        .includes(searchVal.toLowerCase()) ||
-                        item.title
+            <div className="flex space-x-4 ml-4 pl-4 border-l-2 border-gray-100">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                Severity :
+                <select
+                  name="Severity"
+                  value={sevFilter}
+                  className="border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  onChange={(e) => {
+                    const newSev = e.target.value;
+                    setSevFilter(newSev);
+                    const filteredData = mockIncidents.filter(
+                      (item) =>
+                        (item.id
                           .toLowerCase()
-                          .includes(searchVal.toLowerCase())) &&
-                      (newSev === "all" || item.severity === newSev) && 
-                      (statusFilter === "all" || item.status === statusFilter)
-                  );
-                  setFilteredINC(filteredData);
-                }}
-              >
-                <option value="all">All</option>
-                <option value="P1">P1</option>
-                <option value="P2">P2</option>
-                <option value="P3">P3</option>
-                <option value="P4">P4</option>
-              </select>
-            </label>
+                          .includes(searchVal.toLowerCase()) ||
+                          item.title
+                            .toLowerCase()
+                            .includes(searchVal.toLowerCase())) &&
+                        (newSev === "all" || item.severity === newSev) &&
+                        (statusFilter === "all" || item.status === statusFilter)
+                    );
+                    setFilteredINC(filteredData);
+                  }}
+                >
+                  <option value="all">All</option>
+                  <option value="P1">P1</option>
+                  <option value="P2">P2</option>
+                  <option value="P3">P3</option>
+                  <option value="P4">P4</option>
+                </select>
+              </label>
 
-            <label>
-              Status :
-              <select
-                name="Status"
-                value={statusFilter}
-                onChange={(e) => {
-                  const newValue = e.target.value;
-                  setStatusFilter(newValue);
-                  const filteredData = mockIncidents.filter(
-                    (item) =>
-                      (item.id
-                        .toLowerCase()
-                        .includes(searchVal.toLowerCase()) ||
-                        item.title
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                Status :
+                <select
+                  name="Status"
+                  value={statusFilter}
+                  className="border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    setStatusFilter(newValue);
+                    const filteredData = mockIncidents.filter(
+                      (item) =>
+                        (item.id
                           .toLowerCase()
-                          .includes(searchVal.toLowerCase())) &&
-                      (newValue === "all" || item.status === newValue) && 
-                      (sevFilter === "all" || item.severity === sevFilter)
-                  );
-                  setFilteredINC(filteredData);
-                }}
-              >
-                <option value="all">All</option>
-                <option value="New">New</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Resolved">Resolved</option>
-                <option value="Closed">Closed</option>
-              </select>
-            </label>
+                          .includes(searchVal.toLowerCase()) ||
+                          item.title
+                            .toLowerCase()
+                            .includes(searchVal.toLowerCase())) &&
+                        (newValue === "all" || item.status === newValue) &&
+                        (sevFilter === "all" || item.severity === sevFilter)
+                    );
+                    setFilteredINC(filteredData);
+                  }}
+                >
+                  <option value="all">All</option>
+                  <option value="New">New</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Resolved">Resolved</option>
+                  <option value="Closed">Closed</option>
+                </select>
+              </label>
+            </div>
           </div>
 
           <table className="w-full">
