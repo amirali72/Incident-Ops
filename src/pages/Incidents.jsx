@@ -16,16 +16,15 @@ const Incidents = () => {
     setFilteredINC(filteredData);
   };
 
-  const filterSeverity = (e) => {
-    const newSevFilter = e.target.value;
-    setSevFilter(newSevFilter);
+  //   const newSevFilter = e.target.value;
+  //   setSevFilter(newSevFilter);
 
-    // Filter from ORIGINAL data every time
-    const filteredData = filteredINC.filter(
-      (item) => newSevFilter === "all" || item.severity === newSevFilter
-    );
-    setFilteredINC(filteredData);
-  };
+  //   const filteredData = filteredINC.filter(
+  //     (item) => newSevFilter === "all" || item.severity === newSevFilter
+  //   );
+  //   setFilteredINC(filteredData);
+
+  // };
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -53,7 +52,21 @@ const Incidents = () => {
               <select
                 name="Severity"
                 value={sevFilter}
-                onChange={(e) => filterSeverity(e)}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  setSevFilter(newValue);
+                  const filteredData = mockIncidents.filter(
+                    (item) =>
+                      (item.id
+                        .toLowerCase()
+                        .includes(searchVal.toLowerCase()) ||
+                        item.title
+                          .toLowerCase()
+                          .includes(searchVal.toLowerCase())) &&
+                      (newValue === "all" || item.severity === newValue)
+                  );
+                  setFilteredINC(filteredData);
+                }}
               >
                 <option value="all">All</option>
                 <option value="P1">P1</option>
@@ -62,7 +75,7 @@ const Incidents = () => {
                 <option value="P4">P4</option>
               </select>
             </label>
-            <p>{sevFilter}</p>
+            
           </div>
 
           <table className="w-full">
@@ -77,6 +90,7 @@ const Incidents = () => {
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                   Severity
                 </th>
+                
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                   Status
                 </th>
