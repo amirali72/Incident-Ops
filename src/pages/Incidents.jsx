@@ -6,7 +6,10 @@ import {
   FaSortAlphaUp,
   FaSortNumericDownAlt,
   FaSortNumericDown,
+  FaSearch,
+  FaFileDownload,
 } from "react-icons/fa";
+import Papa from "papaparse";
 
 const Incidents = () => {
   const [searchVal, setSearchVal] = useState("");
@@ -25,15 +28,34 @@ const Incidents = () => {
     setFilteredINC(filteredData);
   };
 
-  //   const newSevFilter = e.target.value;
-  //   setSevFilter(newSevFilter);
+  // papaparse export to csv and download func
+  const exportToCSV = () => {
+    const csvData = filteredINC.map((item) => ({
+      ID: item.id,
+      Title: item.title,
+      Severity: item.severity,
+      Status: item.status,
+      "Assigned To": item.assignedTo,
+      "SLA Hours": item.slaHours,
+      "Opened At": new Date(item.openedAt).toLocaleString(),
+    }));
 
-  //   const filteredData = filteredINC.filter(
-  //     (item) => newSevFilter === "all" || item.severity === newSevFilter
-  //   );
-  //   setFilteredINC(filteredData);
+    const csv = Papa.unparse(csvData);
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
 
-  // };
+    link.setAttribute("href", url);
+    link.setAttribute(
+      "download",
+      `incidents_${new Date().toISOString().slice(0, 10)}.csv`
+    );
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -41,83 +63,96 @@ const Incidents = () => {
 
       <div className="bg-white rounded-xl shadow-md overflow-hidden ">
         <div className="overflow-x-auto ">
-          <div className="flex items-center gap-3 p-3">
-            <input
-              type="text"
-              value={searchVal}
-              onChange={(e) => setSearchVal(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && searchIncidents()}
-              className="border-2 border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-            <button
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200 shadow-sm"
-              onClick={searchIncidents}
-            >
-              Search
-            </button>
+          <div className="flex items-center justify-between gap-3 p-3">
+            <div className="flex">
+              <input
+                type="text"
+                value={searchVal}
+                onChange={(e) => setSearchVal(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && searchIncidents()}
+                className="border-2 border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+              <button
+                className="bg-blue-600 hover:bg-blue-700 text-white mx-2 px-4 py-2 rounded-md text-sm font-medium transition duration-200 shadow-sm"
+                onClick={searchIncidents}
+              >
+                Search
+              </button>
 
-            <div className="flex space-x-4 ml-4 pl-4 border-l-2 border-gray-100">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                Severity :
-                <select
-                  name="Severity"
-                  value={sevFilter}
-                  className="border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  onChange={(e) => {
-                    const newSev = e.target.value;
-                    setSevFilter(newSev);
-                    const filteredData = mockIncidents.filter(
-                      (item) =>
-                        (item.id
-                          .toLowerCase()
-                          .includes(searchVal.toLowerCase()) ||
-                          item.title
+              <div className="flex space-x-4 ml-4 pl-4 border-l-2 border-gray-100">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                  Severity :
+                  <select
+                    name="Severity"
+                    value={sevFilter}
+                    className="border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    onChange={(e) => {
+                      const newSev = e.target.value;
+                      setSevFilter(newSev);
+                      const filteredData = mockIncidents.filter(
+                        (item) =>
+                          (item.id
                             .toLowerCase()
-                            .includes(searchVal.toLowerCase())) &&
-                        (newSev === "all" || item.severity === newSev) &&
-                        (statusFilter === "all" || item.status === statusFilter)
-                    );
-                    setFilteredINC(filteredData);
-                  }}
-                >
-                  <option value="all">All</option>
-                  <option value="P1">P1</option>
-                  <option value="P2">P2</option>
-                  <option value="P3">P3</option>
-                  <option value="P4">P4</option>
-                </select>
-              </label>
+                            .includes(searchVal.toLowerCase()) ||
+                            item.title
+                              .toLowerCase()
+                              .includes(searchVal.toLowerCase())) &&
+                          (newSev === "all" || item.severity === newSev) &&
+                          (statusFilter === "all" ||
+                            item.status === statusFilter)
+                      );
+                      setFilteredINC(filteredData);
+                    }}
+                  >
+                    <option value="all">All</option>
+                    <option value="P1">P1</option>
+                    <option value="P2">P2</option>
+                    <option value="P3">P3</option>
+                    <option value="P4">P4</option>
+                  </select>
+                </label>
 
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                Status :
-                <select
-                  name="Status"
-                  value={statusFilter}
-                  className="border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  onChange={(e) => {
-                    const newValue = e.target.value;
-                    setStatusFilter(newValue);
-                    const filteredData = mockIncidents.filter(
-                      (item) =>
-                        (item.id
-                          .toLowerCase()
-                          .includes(searchVal.toLowerCase()) ||
-                          item.title
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                  Status :
+                  <select
+                    name="Status"
+                    value={statusFilter}
+                    className="border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      setStatusFilter(newValue);
+                      const filteredData = mockIncidents.filter(
+                        (item) =>
+                          (item.id
                             .toLowerCase()
-                            .includes(searchVal.toLowerCase())) &&
-                        (newValue === "all" || item.status === newValue) &&
-                        (sevFilter === "all" || item.severity === sevFilter)
-                    );
-                    setFilteredINC(filteredData);
-                  }}
-                >
-                  <option value="all">All</option>
-                  <option value="New">New</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Resolved">Resolved</option>
-                  <option value="Closed">Closed</option>
-                </select>
-              </label>
+                            .includes(searchVal.toLowerCase()) ||
+                            item.title
+                              .toLowerCase()
+                              .includes(searchVal.toLowerCase())) &&
+                          (newValue === "all" || item.status === newValue) &&
+                          (sevFilter === "all" || item.severity === sevFilter)
+                      );
+                      setFilteredINC(filteredData);
+                    }}
+                  >
+                    <option value="all">All</option>
+                    <option value="New">New</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Resolved">Resolved</option>
+                    <option value="Closed">Closed</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+            <div>
+              <button
+                onClick={exportToCSV}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium shadow-sm ml-2 flex items-center gap-1"
+                title="Export filtered data to CSV"
+              >
+                <FaFileDownload />
+                Export ({filteredINC.length})
+              </button>
             </div>
           </div>
 
@@ -129,10 +164,9 @@ const Incidents = () => {
                   <div
                     className="self-center border cursor-pointer"
                     onClick={() =>
-                      sortINC === "new" 
-                      ? (setSortINC("old"), setSortSLA(""))
-                      : 
-                      (setSortINC("new"), setSortSLA(""))
+                      sortINC === "new"
+                        ? (setSortINC("old"), setSortSLA(""))
+                        : (setSortINC("new"), setSortSLA(""))
                     }
                   >
                     {sortINC === "new" ? (
