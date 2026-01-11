@@ -41,6 +41,8 @@ const Incidents = () => {
     }));
 
     const csv = Papa.unparse(csvData);
+
+    //download logic
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
@@ -76,7 +78,7 @@ const Incidents = () => {
                 className="bg-blue-600 hover:bg-blue-700 text-white mx-2 px-4 py-2 rounded-md text-sm font-medium transition duration-200 shadow-sm"
                 onClick={searchIncidents}
               >
-                Search
+                <FaSearch className="text-sm"/>
               </button>
 
               <div className="flex space-x-4 ml-4 pl-4 border-l-2 border-gray-100">
