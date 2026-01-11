@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { FaCircle } from "react-icons/fa";
 import { mockIncidents } from "../data/mockIncidents";
-import { FaSortAlphaDownAlt, FaSortAlphaUp } from "react-icons/fa";
+import {
+  FaSortAlphaDownAlt,
+  FaSortAlphaUp,
+  FaSortNumericDownAlt,
+  FaSortNumericDown,
+} from "react-icons/fa";
 
 const Incidents = () => {
   const [searchVal, setSearchVal] = useState("");
@@ -9,6 +14,7 @@ const Incidents = () => {
   const [sevFilter, setSevFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortINC, setSortINC] = useState("new");
+  const [sortSLA, setSortSLA] = useState("");
 
   const searchIncidents = () => {
     const filteredData = mockIncidents.filter(
@@ -123,7 +129,10 @@ const Incidents = () => {
                   <div
                     className="self-center border cursor-pointer"
                     onClick={() =>
-                      sortINC === "new" ? setSortINC("old") : setSortINC("new")
+                      sortINC === "new" 
+                      ? (setSortINC("old"), setSortSLA(""))
+                      : 
+                      (setSortINC("new"), setSortSLA(""))
                     }
                   >
                     {sortINC === "new" ? (
@@ -147,8 +156,22 @@ const Incidents = () => {
                   Assigned to
                 </th>
 
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                  SLA Status
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider flex space-x-1">
+                  <h2>SLA Status</h2>
+                  <div
+                    className="self-center border cursor-pointer"
+                    onClick={() =>
+                      sortSLA === "high"
+                        ? setSortSLA("low")
+                        : setSortSLA("high")
+                    }
+                  >
+                    {sortSLA === "high" ? (
+                      <FaSortNumericDown />
+                    ) : (
+                      <FaSortNumericDownAlt />
+                    )}
+                  </div>
                 </th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                   Actions
@@ -162,6 +185,18 @@ const Incidents = () => {
                     return a.id.localeCompare(b.id); // Newest first
                   } else {
                     return b.id.localeCompare(a.id); // Oldest first
+                  }
+                })
+                .sort((a, b) => {
+                  const aDeadline = a.openedAt + a.slaHours * 60 * 60 * 1000;
+                  const bDeadline = b.openedAt + b.slaHours * 60 * 60 * 1000;
+                  const aRemaining = aDeadline - Date.now();
+                  const bRemaining = bDeadline - Date.now();
+
+                  if (sortSLA === "high") {
+                    return bRemaining - aRemaining; // Most time first
+                  } else if (sortSLA === "low") {
+                    return aRemaining - bRemaining; // Urgent first
                   }
                 })
                 .map((item) => {
