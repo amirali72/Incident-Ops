@@ -72,10 +72,10 @@ const Incidents = () => {
                 value={searchVal}
                 onChange={(e) => setSearchVal(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && searchIncidents()}
-                className="border-2 border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
               <button
-                className="bg-blue-600 hover:bg-blue-700 text-white mx-2 px-4 py-2 rounded-md text-sm font-medium transition duration-200 shadow-sm"
+                className=" border border-gray-300 cursor-pointer mx-2 px-4 py-2 rounded-md text-sm font-medium transition duration-200 "
                 onClick={searchIncidents}
               >
                 <FaSearch className="text-sm"/>
@@ -87,7 +87,7 @@ const Incidents = () => {
                   <select
                     name="Severity"
                     value={sevFilter}
-                    className="border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 "
                     onChange={(e) => {
                       const newSev = e.target.value;
                       setSevFilter(newSev);
@@ -149,7 +149,7 @@ const Incidents = () => {
             <div>
               <button
                 onClick={exportToCSV}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium shadow-sm ml-2 flex items-center gap-1"
+                className=" border border-gray-300 px-4 py-2 rounded-md text-sm font-medium  ml-2 flex items-center gap-1"
                 title="Export filtered data to CSV"
               >
                 <FaFileDownload />
