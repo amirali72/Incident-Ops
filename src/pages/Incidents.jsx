@@ -18,6 +18,14 @@ const Incidents = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortINC, setSortINC] = useState("new");
   const [sortSLA, setSortSLA] = useState("");
+  const [currentPage, setCurrentPage] = useState(5);
+  const itemsPerPage = 5;
+
+  const totalPages = Math.ceil(filteredINC.length / itemsPerPage);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredINC.slice(indexOfFirstItem, indexOfLastItem);
 
   const searchIncidents = () => {
     const filteredData = mockIncidents.filter(
@@ -60,8 +68,8 @@ const Incidents = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Incidents</h1>
+    <div className="p-5 bg-gray-50 min-h-screen">
+      <h1 className="text-xl font-bold text-gray-800 mb-3">Incidents</h1>
 
       <div className="bg-white rounded-xl shadow-md overflow-hidden ">
         <div className="overflow-x-auto ">
@@ -78,7 +86,7 @@ const Incidents = () => {
                 className=" border border-gray-300 cursor-pointer mx-2 px-4 py-2 rounded-md text-sm font-medium transition duration-200 "
                 onClick={searchIncidents}
               >
-                <FaSearch className="text-sm"/>
+                <FaSearch className="text-sm" />
               </button>
 
               <div className="flex space-x-4 ml-4 pl-4 border-l-2 border-gray-100">
@@ -215,7 +223,7 @@ const Incidents = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {filteredINC
+              {currentItems
                 .sort((a, b) => {
                   if (sortINC === "new") {
                     return a.id.localeCompare(b.id); // Newest first
@@ -334,6 +342,17 @@ const Incidents = () => {
                 })}
             </tbody>
           </table>
+          <div className="flex justify-between">
+            <p>{`Showing ${indexOfFirstItem} to ${
+              indexOfLastItem < filteredINC.length
+                ? indexOfLastItem
+                : filteredINC.length
+            } of ${filteredINC.length}`}</p>
+            <div>
+              <button disabled={currentPage===1} onClick={()=>setCurrentPage(prev=>prev-1)} >Prev</button>
+              <button disabled={indexOfLastItem>=filteredINC.length} onClick={()=>setCurrentPage(prev=>prev+1)}>Next</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

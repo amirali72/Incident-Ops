@@ -262,4 +262,16 @@ export const mockIncidents = [
     title: "Test environment cleanup",
     description: "Old test VMs need cleanup",
   },
+  {
+    id: "INC021",
+    createdBy: "alerts@company.com",
+    severity: "P4",
+    status: "In Progress",
+    openedAt: Date.now() - 60 * 60 * 1000,
+    slaHours: 48,
+    assignedTo: "Divya Nair",
+    assignedGroup: "Server Team",
+    title: "Test environment cleanup",
+    description: "Old test VMs need cleanup",
+  },
 ];
