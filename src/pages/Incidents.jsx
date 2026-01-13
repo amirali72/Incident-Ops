@@ -18,7 +18,7 @@ const Incidents = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortINC, setSortINC] = useState("new");
   const [sortSLA, setSortSLA] = useState("");
-  const [currentPage, setCurrentPage] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
   const totalPages = Math.ceil(filteredINC.length / itemsPerPage);
@@ -28,12 +28,14 @@ const Incidents = () => {
   const currentItems = filteredINC.slice(indexOfFirstItem, indexOfLastItem);
 
   const searchIncidents = () => {
+    setCurrentPage(1)
     const filteredData = mockIncidents.filter(
       (item) =>
         item.id.toLowerCase().includes(searchVal.toLowerCase()) ||
         item.title.toLowerCase().includes(searchVal.toLowerCase())
     );
     setFilteredINC(filteredData);
+    
   };
 
   // papaparse export to csv and download func
@@ -99,6 +101,7 @@ const Incidents = () => {
                     onChange={(e) => {
                       const newSev = e.target.value;
                       setSevFilter(newSev);
+                      setCurrentPage(1);
                       const filteredData = mockIncidents.filter(
                         (item) =>
                           (item.id
@@ -129,6 +132,7 @@ const Incidents = () => {
                     value={statusFilter}
                     className="border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     onChange={(e) => {
+                      setCurrentPage(1);
                       const newValue = e.target.value;
                       setStatusFilter(newValue);
                       const filteredData = mockIncidents.filter(
@@ -343,14 +347,39 @@ const Incidents = () => {
             </tbody>
           </table>
           <div className="flex justify-between">
-            <p>{`Showing ${indexOfFirstItem} to ${
+            <p>{`Showing ${indexOfFirstItem+1} to ${
               indexOfLastItem < filteredINC.length
                 ? indexOfLastItem
                 : filteredINC.length
             } of ${filteredINC.length}`}</p>
             <div>
-              <button disabled={currentPage===1} onClick={()=>setCurrentPage(prev=>prev-1)} >Prev</button>
-              <button disabled={indexOfLastItem>=filteredINC.length} onClick={()=>setCurrentPage(prev=>prev+1)}>Next</button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`px-2 ${page===currentPage ? 'text-black' : "text-blue-600"}` }
+                  >
+                    {page}
+                  </button>
+                )
+              )}
+            </div>
+            <div className="m-2 mx-3 flex space-x-2">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((prev) => prev - 1)}
+                className="px-3 py-1 rounded border disabled:opacity-50"
+              >
+                Prev
+              </button>
+              <button
+                disabled={indexOfLastItem >= filteredINC.length}
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+                className="px-3 py-1 rounded border disabled:opacity-50"
+              >
+                Next
+              </button>
             </div>
           </div>
         </div>
