@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { mockIncidents } from "../data/mockIncidents";
 
 const CreateIncident = () => {
   const [title, setTitle] = useState("");
@@ -12,6 +13,8 @@ const CreateIncident = () => {
   const [touched, setTouched] = useState({});
   const [slaHours, setSLAHours] = useState("24");
   const slaMap = { P1: 4, P2: 8, P3: 24, P4: 48 };
+
+  const navigate = useNavigate();
 
   const validate = () => {
     const newErrors = {};
@@ -45,18 +48,30 @@ const CreateIncident = () => {
   }, [title, description, createdBy, touched]);
 
   useEffect(() => {
-  setSLAHours(slaMap[severity] || 48);
-}, [severity]);
+    setSLAHours(slaMap[severity] || 48);
+  }, [severity]);
 
   const createNewINC = () => {
-    console.log("INC CREATED:", {
-      title,
-      description,
-      severity,
-      assignedTo,
-      assignedGroup,
-      createdBy,
+    const incNum = `INC${(mockIncidents.length + 1).toString().padStart(3, "0")}`;
+    mockIncidents.push({
+      id: incNum,
+      createdBy: createdBy,
+      severity: severity,
+      status: "New",
+      openedAt: Date.now(),
+      slaHours: Number(slaHours),
+      assignedTo: assignedTo,
+      assignedGroup: assignedGroup,
+      title: title,
+      description: description,
     });
+    setTitle("");
+    setDescription("");
+    setAssignedGroup("ITHD");
+    setAssignedTo("");
+    setCreatedBy("");
+    setSeverity("P4");
+    navigate('/incidents')
   };
 
   const isFormValid = Object.keys(errors).length === 0;
