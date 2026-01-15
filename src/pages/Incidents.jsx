@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { FaCircle } from "react-icons/fa";
 import { mockIncidents } from "../data/mockIncidents";
 import {
   FaSortAlphaDownAlt,
@@ -10,6 +9,7 @@ import {
   FaFileDownload,
 } from "react-icons/fa";
 import Papa from "papaparse";
+import SLATimer from "../components/SLATimer";
 
 const Incidents = () => {
   const [searchVal, setSearchVal] = useState("");
@@ -28,14 +28,13 @@ const Incidents = () => {
   const currentItems = filteredINC.slice(indexOfFirstItem, indexOfLastItem);
 
   const searchIncidents = () => {
-    setCurrentPage(1)
+    setCurrentPage(1);
     const filteredData = mockIncidents.filter(
       (item) =>
         item.id.toLowerCase().includes(searchVal.toLowerCase()) ||
         item.title.toLowerCase().includes(searchVal.toLowerCase())
     );
     setFilteredINC(filteredData);
-    
   };
 
   // papaparse export to csv and download func
@@ -286,23 +285,23 @@ const Incidents = () => {
                     (Math.abs(remaining) % (1000 * 60 * 60)) / (1000 * 60)
                   );
 
-                  const slaStatus =
-                    item.status === "Closed" || item.status === "Resolved" ? (
-                      <span className="text-green-600 flex space-x-1.5">
-                        <FaCircle className="self-center" />
-                        <h1>Completed</h1>
-                      </span>
-                    ) : remaining > 0 ? (
-                      <span className="text-orange-500 flex space-x-1.5">
-                        <FaCircle className="self-center" />
-                        <h1>{`${hours}h ${minutes}m left`}</h1>
-                      </span>
-                    ) : (
-                      <span className="text-red-600 flex space-x-1.5">
-                        <FaCircle className="self-center" />
-                        <h1>{`-${hours}h ${minutes}m`}</h1>
-                      </span>
-                    );
+                  // const slaStatus =
+                  //   item.status === "Closed" || item.status === "Resolved" ? (
+                  //     <span className="text-green-600 flex space-x-1.5">
+                  //       <FaCircle className="self-center" />
+                  //       <h1>Completed</h1>
+                  //     </span>
+                  //   ) : remaining > 0 ? (
+                  //     <span className="text-orange-500 flex space-x-1.5">
+                  //       <FaCircle className="self-center" />
+                  //       <h1>{`${hours}h ${minutes}m left`}</h1>
+                  //     </span>
+                  //   ) : (
+                  //     <span className="text-red-600 flex space-x-1.5">
+                  //       <FaCircle className="self-center" />
+                  //       <h1>{`-${hours}h ${minutes}m`}</h1>
+                  //     </span>
+                  //   );
 
                   return (
                     <tr
@@ -334,7 +333,13 @@ const Incidents = () => {
                       </td>
 
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {slaStatus}
+                        <SLATimer
+                          item={item}
+                          deadline={deadline}
+                          hours={hours}
+                          minutes={minutes}
+                          remaining={remaining}
+                        />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
                         <button className="text-blue-600 hover:text-blue-800 font-medium transition duration-150">
@@ -347,41 +352,47 @@ const Incidents = () => {
             </tbody>
           </table>
           <div className="flex justify-between items-center px-6 py-4 bg-gray-50 border-t border-gray-200">
-  <p className="text-sm text-gray-600">{`Showing ${indexOfFirstItem+1} to ${
-    indexOfLastItem < filteredINC.length
-      ? indexOfLastItem
-      : filteredINC.length
-  } of ${filteredINC.length}`}</p>
-  <div className="flex gap-1">
-    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-      (page) => (
-        <button
-          key={page}
-          onClick={() => setCurrentPage(page)}
-          className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${page===currentPage ? 'bg-blue-600 text-white' : "text-gray-600 hover:bg-gray-100"}` }
-        >
-          {page}
-        </button>
-      )
-    )}
-  </div>
-  <div className="flex gap-2">
-    <button
-      disabled={currentPage === 1}
-      onClick={() => setCurrentPage((prev) => prev - 1)}
-      className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-    >
-      Prev
-    </button>
-    <button
-      disabled={indexOfLastItem >= filteredINC.length}
-      onClick={() => setCurrentPage((prev) => prev + 1)}
-      className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-    >
-      Next
-    </button>
-  </div>
-</div>
+            <p className="text-sm text-gray-600">{`Showing ${
+              indexOfFirstItem + 1
+            } to ${
+              indexOfLastItem < filteredINC.length
+                ? indexOfLastItem
+                : filteredINC.length
+            } of ${filteredINC.length}`}</p>
+            <div className="flex gap-1">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                      page === currentPage
+                        ? "bg-blue-600 text-white"
+                        : "text-gray-600 hover:bg-gray-100"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                )
+              )}
+            </div>
+            <div className="flex gap-2">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((prev) => prev - 1)}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                Prev
+              </button>
+              <button
+                disabled={indexOfLastItem >= filteredINC.length}
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                Next
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
