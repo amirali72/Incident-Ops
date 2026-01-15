@@ -10,6 +10,8 @@ const CreateIncident = () => {
   const [createdBy, setCreatedBy] = useState("");
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
+  const [slaHours, setSLAHours] = useState("24");
+  const slaMap = { P1: 4, P2: 8, P3: 24, P4: 48 };
 
   const validate = () => {
     const newErrors = {};
@@ -39,8 +41,12 @@ const CreateIncident = () => {
   };
 
   useEffect(() => {
-  setErrors(validate());
-}, [title, description, createdBy, touched]);
+    setErrors(validate());
+  }, [title, description, createdBy, touched]);
+
+  useEffect(() => {
+  setSLAHours(slaMap[severity] || 48);
+}, [severity]);
 
   const createNewINC = () => {
     console.log("INC CREATED:", {
@@ -71,7 +77,7 @@ const CreateIncident = () => {
               className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm"
               value={createdBy}
               onChange={(e) => setCreatedBy(e.target.value)}
-              onBlur={() => setTouched({...touched, createdBy: true})}
+              onBlur={() => setTouched({ ...touched, createdBy: true })}
             />
             {errors.createdBy && (
               <p className="text-red-500 text-xs mt-1">{errors.createdBy}</p>
@@ -94,6 +100,7 @@ const CreateIncident = () => {
               <option value="P3">P3</option>
               <option value="P4">P4</option>
             </select>
+            <p className="text-black text-xs mt-1">SLA : {slaHours} Hours</p>
           </div>
 
           {/* Assignment Group */}
@@ -155,7 +162,7 @@ const CreateIncident = () => {
               }`}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              onBlur={() => setTouched({...touched, title: true})}
+              onBlur={() => setTouched({ ...touched, title: true })}
             />
             {errors.title && (
               <p className="text-red-500 text-xs mt-1">{errors.title}</p>
@@ -176,7 +183,7 @@ const CreateIncident = () => {
               }`}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              onBlur={() => setTouched({...touched, description: true})}
+              onBlur={() => setTouched({ ...touched, description: true })}
             />
             {errors.description && (
               <p className="text-red-500 text-xs mt-1">{errors.description}</p>
