@@ -10,8 +10,10 @@ import {
 } from "react-icons/fa";
 import Papa from "papaparse";
 import SLATimer from "../components/SLATimer";
+import { useNavigate } from "react-router-dom";
 
 const Incidents = () => {
+  const navigate = useNavigate();
   const [searchVal, setSearchVal] = useState("");
   const [filteredINC, setFilteredINC] = useState(mockIncidents);
   const [sevFilter, setSevFilter] = useState("all");
@@ -70,7 +72,15 @@ const Incidents = () => {
 
   return (
     <div className="p-5 bg-gray-50 min-h-screen">
-      <h1 className="text-xl font-bold text-gray-800 mb-3">Incidents</h1>
+      <div className="flex justify-between mb-2">
+        <h1 className="text-2xl font-bold text-gray-800 mb-3">Incidents</h1>
+        <button
+          onClick={()=>navigate("/incidents/new")}
+          className=" bg-blue-700 border text-white border-gray-300 px-4 py-2 rounded-md text-sm font-medium"
+        >
+          Create New INC
+        </button>
+      </div>
 
       <div className="bg-white rounded-xl shadow-md overflow-hidden ">
         <div className="overflow-x-auto ">
