@@ -8,6 +8,7 @@ import DashboardLayout from "./components/DashboardLayout";
 import Incidents from "./pages/Incidents";
 import Analytics from "./pages/Analytics";
 import Reports from "./pages/Reports";
+import CreateIncident from "./pages/CreateIncident";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/incidents" element={<Incidents />} />
+            <Route path="/incidents/new" element={<CreateIncident />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/reports" element={<Reports />} />
           </Route>

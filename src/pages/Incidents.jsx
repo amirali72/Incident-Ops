@@ -274,16 +274,16 @@ const Incidents = () => {
                       ? "bg-green-100 text-green-700"
                       : "bg-gray-100 text-gray-700";
 
-                  const deadline =
-                    item.openedAt + item.slaHours * 60 * 60 * 1000;
-                  const remaining = deadline - Date.now();
+                  // const deadline =
+                  //   item.openedAt + item.slaHours * 60 * 60 * 1000;
+                  // const remaining = deadline - Date.now();
 
-                  const hours = Math.floor(
-                    Math.abs(remaining) / (1000 * 60 * 60)
-                  );
-                  const minutes = Math.floor(
-                    (Math.abs(remaining) % (1000 * 60 * 60)) / (1000 * 60)
-                  );
+                  // const hours = Math.floor(
+                  //   Math.abs(remaining) / (1000 * 60 * 60)
+                  // );
+                  // const minutes = Math.floor(
+                  //   (Math.abs(remaining) % (1000 * 60 * 60)) / (1000 * 60)
+                  // );
 
                   // const slaStatus =
                   //   item.status === "Closed" || item.status === "Resolved" ? (
@@ -334,11 +334,9 @@ const Incidents = () => {
 
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <SLATimer
-                          item={item}
-                          deadline={deadline}
-                          hours={hours}
-                          minutes={minutes}
-                          remaining={remaining}
+                          openedAt={item.openedAt}
+                          slaHours={item.slaHours}
+                          status={item.status}
                         />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
