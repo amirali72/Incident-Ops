@@ -350,7 +350,7 @@ const Incidents = () => {
                         />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        <button className="text-blue-600 hover:text-blue-800 font-medium transition duration-150">
+                        <button className="text-blue-600 hover:text-blue-800 font-medium transition duration-150" onClick={()=>navigate(`/incidents/${item.id}`)}>
                           View
                         </button>
                       </td>
