@@ -52,7 +52,9 @@ const CreateIncident = () => {
   }, [severity]);
 
   const createNewINC = () => {
-    const incNum = `INC${(mockIncidents.length + 1).toString().padStart(3, "0")}`;
+    const incNum = `INC${(mockIncidents.length + 1)
+      .toString()
+      .padStart(3, "0")}`;
     mockIncidents.push({
       id: incNum,
       createdBy: createdBy,
@@ -71,7 +73,7 @@ const CreateIncident = () => {
     setAssignedTo("");
     setCreatedBy("");
     setSeverity("P4");
-    navigate('/incidents')
+    navigate("/incidents");
   };
 
   const isFormValid = Object.keys(errors).length === 0;
@@ -206,17 +208,26 @@ const CreateIncident = () => {
           </div>
         </div>
 
-        <button
-          onClick={createNewINC}
-          disabled={!isFormValid}
-          className={`mt-6 px-6 py-2.5 text-sm font-medium text-white rounded-lg transition-colors ${
-            isFormValid
-              ? "bg-blue-600 hover:bg-blue-700 cursor-pointer"
-              : "bg-gray-400 cursor-not-allowed"
-          }`}
-        >
-          Create
-        </button>
+        <div className="flex space-x-2">
+          <button
+            onClick={createNewINC}
+            disabled={!isFormValid}
+            className={`mt-6 px-6 py-2.5 text-sm font-medium text-white rounded-lg transition-colors ${
+              isFormValid
+                ? "bg-blue-600 hover:bg-blue-700 cursor-pointer"
+                : "bg-gray-400 cursor-not-allowed"
+            }`}
+          >
+            Create
+          </button>
+
+          <button
+            onClick={()=>navigate("/incidents")}
+            className={`mt-6 px-6 py-2.5 text-sm font-medium text-white rounded-lg transition-colors bg-gray-400 cursor-pointer`}
+          >
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
   );
