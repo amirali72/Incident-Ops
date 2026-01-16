@@ -12,6 +12,7 @@ const CreateIncident = () => {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [slaHours, setSLAHours] = useState("24");
+  const [successMsg, setSuccessMsg] = useState("");
   const slaMap = { P1: 4, P2: 8, P3: 24, P4: 48 };
 
   const navigate = useNavigate();
@@ -67,20 +68,39 @@ const CreateIncident = () => {
       title: title,
       description: description,
     });
-    setTitle("");
-    setDescription("");
-    setAssignedGroup("ITHD");
-    setAssignedTo("");
-    setCreatedBy("");
-    setSeverity("P4");
-    navigate("/incidents");
+
+    setSuccessMsg(`✅ Incident ${incNum} created successfully!`);
+    setTimeout(() => {
+      setTitle("");
+      setDescription("");
+      setAssignedGroup("ITHD");
+      setAssignedTo("");
+      setCreatedBy("");
+      setSeverity("P4");
+      setSuccessMsg("");
+      navigate("/incidents");
+    }, 1000);
   };
 
   const isFormValid = Object.keys(errors).length === 0;
 
   return (
     <div className="">
-      <h1 className="text-lg font-bold text-gray-800 mb-2">NEW INCIDENT</h1>
+      {successMsg && (
+        <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg animate-pulse">
+          {successMsg}
+        </div>
+      )}
+      <div className="text-sm text-gray-600 mb-2">
+        <span
+          onClick={() => navigate("/incidents")}
+          className="cursor-pointer hover:text-blue-600"
+        >
+          Incidents
+        </span>
+        <span className="mx-2">&gt;</span>
+        <span className="text-gray-900">New Incident</span>
+      </div>
       <div className="bg-white rounded-xl shadow-md p-6 max-w-4xl">
         <div className="grid grid-cols-2 gap-5 mb-5">
           {/* Requestor */}
@@ -222,7 +242,7 @@ const CreateIncident = () => {
           </button>
 
           <button
-            onClick={()=>navigate("/incidents")}
+            onClick={() => navigate("/incidents")}
             className={`mt-6 px-6 py-2.5 text-sm font-medium text-white rounded-lg transition-colors bg-gray-400 cursor-pointer`}
           >
             Cancel
