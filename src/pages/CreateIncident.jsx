@@ -53,6 +53,10 @@ const CreateIncident = () => {
   }, [severity]);
 
   const createNewINC = () => {
+    if (title==="" || description==="" || createdBy==="") {
+      alert("Please fill the complete details")
+      return;
+    }
     const incNum = `INC${(mockIncidents.length + 1)
       .toString()
       .padStart(3, "0")}`;
