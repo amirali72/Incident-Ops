@@ -13,6 +13,7 @@ const CreateIncident = () => {
   const [touched, setTouched] = useState({});
   const [slaHours, setSLAHours] = useState("24");
   const [successMsg, setSuccessMsg] = useState("");
+
   const slaMap = { P1: 4, P2: 8, P3: 24, P4: 48 };
 
   const navigate = useNavigate();
@@ -53,8 +54,8 @@ const CreateIncident = () => {
   }, [severity]);
 
   const createNewINC = () => {
-    if (title==="" || description==="" || createdBy==="") {
-      alert("Please fill the complete details")
+    if (title === "" || description === "" || createdBy === "") {
+      alert("Please fill the complete details");
       return;
     }
     const incNum = `INC${(mockIncidents.length + 1)
@@ -87,6 +88,16 @@ const CreateIncident = () => {
   };
 
   const isFormValid = Object.keys(errors).length === 0;
+
+  const assignedToNames = mockIncidents
+    .map((item) => item.assignedTo)
+    .filter((name, index, arr) => arr.indexOf(name) === index);
+
+  const teamNames = mockIncidents
+    .map((item) => item.assignedGroup)
+    .filter((name, index, arr) => arr.indexOf(name) === index);
+
+  // console.log(teamNames);
 
   return (
     <div className="">
@@ -155,10 +166,12 @@ const CreateIncident = () => {
               className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               onChange={(e) => setAssignedGroup(e.target.value)}
             >
-              <option value="Server">Server Team</option>
-              <option value="Network">Network Team</option>
-              <option value="Database">Database Team</option>
               <option value="ITHD">ITHD</option>
+              {teamNames.map((name, index) => (
+                <option key={index} value={name}>
+                  {name}
+                </option>
+              ))}
             </select>
             {errors.assignedGroup && (
               <p className="text-red-500 text-xs mt-1">
@@ -178,11 +191,11 @@ const CreateIncident = () => {
               className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               onChange={(e) => setAssignedTo(e.target.value)}
             >
-              <option value="">Assignment To</option>
-              <option value="EngineerA">EngineerA</option>
-              <option value="EngineerB">EngineerB</option>
-              <option value="Engineerc">Engineerc</option>
-              <option value="EngineerD">EngineerD</option>
+              {assignedToNames.map((name, index) => (
+                <option key={index} value={name}>
+                  {name}
+                </option>
+              ))}
             </select>
             {errors.assignedTo && (
               <p className="text-red-500 text-xs mt-1">{errors.assignedTo}</p>

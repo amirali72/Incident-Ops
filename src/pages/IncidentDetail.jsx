@@ -78,8 +78,22 @@ const IncidentDetail = () => {
       createdBy: createdBy,
     };
     console.log(mockIncidents[index]);
-    navigate("/incidents")
+    navigate("/incidents");
   };
+
+  const assignedToNames = mockIncidents.reduce((acc, curr) => {
+    if (!acc.includes(curr.assignedTo)) {
+      acc.push(curr.assignedTo);
+    }
+    return acc;
+  }, []);
+
+  const teamNames = mockIncidents.reduce((acc, curr) => {
+    if (!acc.includes(curr.assignedGroup)) {
+      acc.push(curr.assignedGroup);
+    }
+    return acc;
+  }, []);
 
   return (
     <div className="">
@@ -181,11 +195,11 @@ const IncidentDetail = () => {
               className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               onChange={(e) => setAssignedGroup(e.target.value)}
             >
-              <option value="Server">Server Team</option>
-              <option value="Network">Network Team</option>
-              <option value="Database">Database Team</option>
-              <option value="ITHD">ITHD</option>
-              <option value="Application Team">Application Team</option>
+              {teamNames.map((name, index) => (
+                <option key={index} value={name}>
+                  {name}
+                </option>
+              ))}
             </select>
             {errors.assignedGroup && (
               <p className="text-red-500 text-xs mt-1">
@@ -206,11 +220,11 @@ const IncidentDetail = () => {
               className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               onChange={(e) => setAssignedTo(e.target.value)}
             >
-              <option value="">Assignment To</option>
-              <option value="EngineerA">EngineerA</option>
-              <option value="EngineerB">EngineerB</option>
-              <option value="Engineerc">Engineerc</option>
-              <option value="EngineerD">EngineerD</option>
+              {assignedToNames.map((name, index) => (
+                <option key={index} value={name}>
+                  {name}
+                </option>
+              ))}
             </select>
             {errors.assignedTo && (
               <p className="text-red-500 text-xs mt-1">{errors.assignedTo}</p>
