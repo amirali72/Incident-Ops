@@ -47,14 +47,30 @@ const Reports = () => {
     return value;
   };
 
-  const filterData = () => {
+  const generateReport = () => {
     let results = mockIncidents;
 
     // Filter by Date
-    results = results.filter((inc)=> inc.openedAt>=dateFrom && inc.openedAt<=dateTo)
+    results = results.filter(
+      (inc) => inc.openedAt >= dateFrom && inc.openedAt <= dateTo
+    );
+
+    // Filter Assignment Group
+    if (groupOperator === "is" && groupValue) {
+      if (groupValue !== "All") {
+        results = results.filter((inc) => inc.assignedGroup === groupValue);
+      }
+    } else if (groupOperator === "isNot" && groupValue) {
+      if (groupValue !== "All") {
+        results = results.filter((inc) => inc.assignedGroup !== groupValue);
+      }
+    } else if (groupOperator === "isOneOf" && groupValues.length > 0) {
+      if (groupValue !== "All") {
+        results = results.filter(inc => groupValues.includes(inc.assignedGroup));
+      }
+    }
 
     console.log(results);
-    
   };
 
   return (
@@ -254,7 +270,7 @@ const Reports = () => {
           <div className="flex mt-4">
             <button
               className="h-8 px-4 bg-blue-600 text-white text-xs font-semibold rounded hover:bg-blue-700 transition"
-              onClick={filterData}
+              onClick={generateReport}
             >
               Generate Report
             </button>
@@ -262,7 +278,9 @@ const Reports = () => {
         </div>
       </div>
 
-      <div>Result Section</div>
+      <div>
+        {!showResults ? <h1>No Reports to show</h1> : <h1>Reports Page</h1>}
+      </div>
     </div>
   );
 };
