@@ -21,6 +21,7 @@ const Reports = () => {
   const [assignedToValues, setAssignedToValues] = useState([]);
   const [assignedToValue, setAssignedToValue] = useState();
   const [showResults, setShowResults] = useState(false);
+  const [filteredINC, setFilteredINC] = useState([]);
 
   const assignedToNames = mockIncidents.reduce((acc, curr) => {
     if (!acc.includes(curr.assignedTo)) {
@@ -65,12 +66,58 @@ const Reports = () => {
         results = results.filter((inc) => inc.assignedGroup !== groupValue);
       }
     } else if (groupOperator === "isOneOf" && groupValues.length > 0) {
-      if (groupValue !== "All") {
+      if (!groupValues.includes("All")) {
         results = results.filter(inc => groupValues.includes(inc.assignedGroup));
       }
     }
 
-    console.log(results);
+    // Filter Priority
+    if (priorityOperator === "is" && priorityValue) {
+      if (priorityValue !== "All") {
+        results = results.filter((inc) => inc.severity === priorityValue);
+      }
+    } else if (priorityOperator === "isNot" && priorityValue) {
+      if (priorityValue !== "All") {
+        results = results.filter((inc) => inc.severity !== priorityValue);
+      }
+    } else if (priorityOperator === "isOneOf" && priorityValues.length > 0) {
+      if (!priorityValues.includes("All")) {
+        results = results.filter(inc => priorityValues.includes(inc.severity));
+      }
+    }
+
+    // Filter by Status
+    if (statusOperator === "is" && statusValue) {
+      if (statusValue !== "All") {
+        results = results.filter((inc) => inc.status === statusValue);
+      }
+    } else if (statusOperator === "isNot" && statusValue) {
+      if (statusValue !== "All") {
+        results = results.filter((inc) => inc.status !== statusValue);
+      }
+    } else if (statusOperator === "isOneOf" && statusValues.length > 0) {
+      if (!statusValues.includes("All")) {
+        results = results.filter(inc => statusValues.includes(inc.status));
+      }
+    }
+
+    // Filter by Assigned To
+    if (assignedToOperator === "is" && assignedToValue) {
+      if (assignedToValue !== "All") {
+        results = results.filter((inc) => inc.assignedTo === assignedToValue);
+      }
+    } else if (assignedToOperator === "isNot" && assignedToValue) {
+      if (assignedToValue !== "All") {
+        results = results.filter((inc) => inc.assignedTo !== assignedToValue);
+      }
+    } else if (assignedToOperator === "isOneOf" && assignedToValues.length > 0) {
+      if (!assignedToValues.includes("All")) {
+        results = results.filter(inc => assignedToValues.includes(inc.assignedTo));
+      }
+    }
+
+    setShowResults(true);
+    setFilteredINC(results);
   };
 
   return (
