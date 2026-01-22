@@ -342,11 +342,15 @@ const Reports = () => {
             <h1>No Reports to show</h1>
           ) : (
             <div>
-              <div className="flex justify-center">
-                <h1 className="font-medium mt-2 mb-4">INCIDENTS TABLE</h1>
+              <div className="flex items-center justify-between">
+                
+                <div class="grow flex justify-center">
+                  <h1 className="font-medium mt-2 mb-4">INCIDENTS TABLE</h1>
+                </div>
+
                 <button
-                  onClick={()=>exportTable(filteredINC)}
-                  className=" border border-gray-300 px-4 py-2 rounded-md text-sm font-medium  ml-2 flex items-center gap-1"
+                  onClick={() => exportTable(filteredINC)}
+                  className=" border border-gray-300 px-4 rounded-md text-sm font-medium  ml-2 flex items-center gap-1 h-10"
                   title="Export filtered data to CSV"
                 >
                   <FaFileDownload />
