@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { mockIncidents } from "../data/mockIncidents";
+import SLATimer from "../components/SLATimer";
+import { useNavigate } from "react-router-dom";
+import { FaFileDownload } from "react-icons/fa";
+import { exportTable } from "../utils/exportTable";
 
 const Reports = () => {
   const date = new Date();
@@ -22,6 +26,7 @@ const Reports = () => {
   const [assignedToValue, setAssignedToValue] = useState();
   const [showResults, setShowResults] = useState(false);
   const [filteredINC, setFilteredINC] = useState([]);
+  const navigate = useNavigate();
 
   const assignedToNames = mockIncidents.reduce((acc, curr) => {
     if (!acc.includes(curr.assignedTo)) {
@@ -67,7 +72,9 @@ const Reports = () => {
       }
     } else if (groupOperator === "isOneOf" && groupValues.length > 0) {
       if (!groupValues.includes("All")) {
-        results = results.filter(inc => groupValues.includes(inc.assignedGroup));
+        results = results.filter((inc) =>
+          groupValues.includes(inc.assignedGroup)
+        );
       }
     }
 
@@ -82,7 +89,9 @@ const Reports = () => {
       }
     } else if (priorityOperator === "isOneOf" && priorityValues.length > 0) {
       if (!priorityValues.includes("All")) {
-        results = results.filter(inc => priorityValues.includes(inc.severity));
+        results = results.filter((inc) =>
+          priorityValues.includes(inc.severity)
+        );
       }
     }
 
@@ -97,7 +106,7 @@ const Reports = () => {
       }
     } else if (statusOperator === "isOneOf" && statusValues.length > 0) {
       if (!statusValues.includes("All")) {
-        results = results.filter(inc => statusValues.includes(inc.status));
+        results = results.filter((inc) => statusValues.includes(inc.status));
       }
     }
 
@@ -110,9 +119,14 @@ const Reports = () => {
       if (assignedToValue !== "All") {
         results = results.filter((inc) => inc.assignedTo !== assignedToValue);
       }
-    } else if (assignedToOperator === "isOneOf" && assignedToValues.length > 0) {
+    } else if (
+      assignedToOperator === "isOneOf" &&
+      assignedToValues.length > 0
+    ) {
       if (!assignedToValues.includes("All")) {
-        results = results.filter(inc => assignedToValues.includes(inc.assignedTo));
+        results = results.filter((inc) =>
+          assignedToValues.includes(inc.assignedTo)
+        );
       }
     }
 
@@ -323,10 +337,160 @@ const Reports = () => {
             </button>
           </div>
         </div>
-      </div>
+        <div className="bg-white p-3 pl-6 mt-6 rounded-md shadow-sm border border-gray-200">
+          {!showResults ? (
+            <h1>No Reports to show</h1>
+          ) : (
+            <div>
+              <div className="flex justify-center">
+                <h1 className="font-medium mt-2 mb-4">INCIDENTS TABLE</h1>
+                <button
+                  onClick={()=>exportTable(filteredINC)}
+                  className=" border border-gray-300 px-4 py-2 rounded-md text-sm font-medium  ml-2 flex items-center gap-1"
+                  title="Export filtered data to CSV"
+                >
+                  <FaFileDownload />
+                  Export ({filteredINC.length})
+                </button>
+              </div>
+              <table className="w-full">
+                <thead className="bg-gray-100 border-b border-gray-200">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider flex space-x-1">
+                      <h2>Incident</h2>
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Title
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Severity
+                    </th>
 
-      <div>
-        {!showResults ? <h1>No Reports to show</h1> : <h1>Reports Page</h1>}
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Assigned to
+                    </th>
+
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider flex space-x-1">
+                      <h2>SLA Status</h2>
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {filteredINC.map((item) => {
+                    const sev =
+                      item.severity === "P1"
+                        ? "Critical"
+                        : item.severity === "P2"
+                        ? "High"
+                        : item.severity === "P3"
+                        ? "Moderate"
+                        : "Low";
+
+                    const severityColor =
+                      sev === "Critical"
+                        ? "text-red-600 bg-red-50"
+                        : sev === "High"
+                        ? "text-orange-600 bg-orange-50"
+                        : sev === "Moderate"
+                        ? "text-yellow-600 bg-yellow-50"
+                        : "text-green-600 bg-green-50";
+
+                    const statusColor =
+                      item.status === "New"
+                        ? "bg-blue-100 text-blue-700"
+                        : item.status === "In Progress"
+                        ? "bg-orange-100 text-orange-700"
+                        : item.status === "Resolved"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-gray-100 text-gray-700";
+
+                    // const deadline =
+                    //   item.openedAt + item.slaHours * 60 * 60 * 1000;
+                    // const remaining = deadline - Date.now();
+
+                    // const hours = Math.floor(
+                    //   Math.abs(remaining) / (1000 * 60 * 60)
+                    // );
+                    // const minutes = Math.floor(
+                    //   (Math.abs(remaining) % (1000 * 60 * 60)) / (1000 * 60)
+                    // );
+
+                    // const slaStatus =
+                    //   item.status === "Closed" || item.status === "Resolved" ? (
+                    //     <span className="text-green-600 flex space-x-1.5">
+                    //       <FaCircle className="self-center" />
+                    //       <h1>Completed</h1>
+                    //     </span>
+                    //   ) : remaining > 0 ? (
+                    //     <span className="text-orange-500 flex space-x-1.5">
+                    //       <FaCircle className="self-center" />
+                    //       <h1>{`${hours}h ${minutes}m left`}</h1>
+                    //     </span>
+                    //   ) : (
+                    //     <span className="text-red-600 flex space-x-1.5">
+                    //       <FaCircle className="self-center" />
+                    //       <h1>{`-${hours}h ${minutes}m`}</h1>
+                    //     </span>
+                    //   );
+
+                    return (
+                      <tr
+                        key={item.id}
+                        className="hover:bg-gray-50 transition duration-150"
+                      >
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          {item.id}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-700">
+                          {item.title}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span
+                            className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${severityColor}`}
+                          >
+                            {sev}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span
+                            className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${statusColor}`}
+                          >
+                            {item.status}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                          {item.assignedTo}
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          <SLATimer
+                            openedAt={item.openedAt}
+                            slaHours={item.slaHours}
+                            status={item.status}
+                          />
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                          <button
+                            className="text-blue-600 hover:text-blue-800 font-medium transition duration-150"
+                            onClick={() => navigate(`/incidents/${item.id}`)}
+                          >
+                            View
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
