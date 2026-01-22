@@ -11,6 +11,7 @@ import {
 import Papa from "papaparse";
 import SLATimer from "../components/SLATimer";
 import { useNavigate } from "react-router-dom";
+import { exportTable } from "../utils/exportTable";
 
 const Incidents = () => {
   const navigate = useNavigate();
@@ -37,37 +38,6 @@ const Incidents = () => {
         item.title.toLowerCase().includes(searchVal.toLowerCase())
     );
     setFilteredINC(filteredData);
-  };
-
-  // papaparse export to csv and download func
-  const exportToCSV = () => {
-    const csvData = filteredINC.map((item) => ({
-      ID: item.id,
-      Title: item.title,
-      Severity: item.severity,
-      Status: item.status,
-      "Assigned To": item.assignedTo,
-      "SLA Hours": item.slaHours,
-      "Opened At": new Date(item.openedAt).toLocaleString(),
-    }));
-
-    const csv = Papa.unparse(csvData);
-
-    //download logic
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(blob);
-
-    link.setAttribute("href", url);
-    link.setAttribute(
-      "download",
-      `incidents_${new Date().toISOString().slice(0, 10)}.csv`
-    );
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
   };
 
   return (
@@ -169,7 +139,7 @@ const Incidents = () => {
             </div>
             <div>
               <button
-                onClick={exportToCSV}
+                onClick={()=>exportTable(filteredINC)}
                 className=" border border-gray-300 px-4 py-2 rounded-md text-sm font-medium  ml-2 flex items-center gap-1"
                 title="Export filtered data to CSV"
               >
