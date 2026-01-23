@@ -40,20 +40,6 @@ const Sidebar = () => {
         </NavLink>
 
         <NavLink
-          to="/analytics"
-          className={({ isActive }) =>
-            `flex items-center px-4 py-3 rounded-lg transition ${
-              isActive
-                ? "bg-blue-200 text-blue-700 font-semibold"
-                : "text-gray-700 hover:bg-gray-300"
-            }`
-          }
-        >
-          <IoStatsChartOutline className="text-xl" />
-          <h3 className="ml-3">Analytics</h3>
-        </NavLink>
-
-        <NavLink
           to="/reports"
           className={({ isActive }) =>
             `flex items-center px-4 py-3 rounded-lg transition ${
@@ -65,6 +51,20 @@ const Sidebar = () => {
         >
           <IoDocumentTextOutline className="text-xl" />
           <h3 className="ml-3">Reports</h3>
+        </NavLink>
+
+        <NavLink
+          to="/analytics"
+          className={({ isActive }) =>
+            `flex items-center px-4 py-3 rounded-lg transition ${
+              isActive
+                ? "bg-blue-200 text-blue-700 font-semibold"
+                : "text-gray-700 hover:bg-gray-300"
+            }`
+          }
+        >
+          <IoStatsChartOutline className="text-xl" />
+          <h3 className="ml-3">Analytics</h3>
         </NavLink>
 
       </div>
