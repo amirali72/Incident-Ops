@@ -328,12 +328,35 @@ const Reports = () => {
           </div>
 
           {/* Button */}
-          <div className="flex mt-4">
+          <div className="flex mt-4 space-x-2">
             <button
               className="h-8 px-4 bg-blue-600 text-white text-xs font-semibold rounded hover:bg-blue-700 transition"
               onClick={generateReport}
             >
               Generate Report
+            </button>
+            <button
+              className="h-8 px-4 bg-gray-500 text-white text-xs font-semibold rounded hover:bg-gray-700 transition"
+              onClick={()=>{
+                setDateFrom(date)
+                setDateTo(new Date())
+                setGroupOperator("is")
+                setGroupValue()
+                setGroupValues([])
+                setPriorityOperator("is")
+                setPriorityValue()
+                setPriorityValues([])
+                setStatusOperator("is")
+                setStatusValue()
+                setStatusValues([])
+                setAssignedToOperator("is")
+                setAssignedToValue()
+                setAssignedToValues([])
+                setFilteredINC([])
+                setShowResults(false)
+              }}
+            >
+              Reset
             </button>
           </div>
         </div>
