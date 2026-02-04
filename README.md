@@ -1,5 +1,5 @@
 
-# 🚨 Incident Ops (Incident Management System)
+# 🚨 Incident Ops (Ticketing Tool)
 
 ![React](https://img.shields.io/badge/React-18-blue?logo=react)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.x-38B2AC?logo=tailwindcss)
