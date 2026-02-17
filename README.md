@@ -11,7 +11,7 @@
 
 ## 🌐 Live Demo
 
-🔗 **Live Demo:** _Coming Soon_  
+🔗 **Live Demo:** **[https://incident-ops.vercel.app/](https://incident-ops.vercel.app/)**
 
 ---
 
@@ -83,7 +83,7 @@ The app will run at **[http://localhost:3000](http://localhost:3000)**
 ## 🔑 Demo Credentials
 
 ```
-Username: admin
+Username: admin@company.com
 Password: admin123
 ```
 
